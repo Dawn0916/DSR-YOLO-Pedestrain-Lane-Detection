@@ -39,15 +39,11 @@ def draw_the_lines(img, lines):
     if lines is not None:
        
     	img = np.copy(img)
-
     	line_image = np.zeros((img.shape[0], img.shape[1], 3), dtype=np.uint8)
-    
-   
     	for line in lines:
         	for x1,y1,x2,y2 in line:      
         		cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 20)
     
-
     	α = 1
     	β = 1
     	γ = 0    
@@ -57,7 +53,7 @@ def draw_the_lines(img, lines):
 	
 
 outputdir=os.getcwd()
-path_video = os.path.join(outputdir, "data", "project_video" + ".mp4")
+path_video = os.path.join(outputdir, "data", "road_0160" + ".mp4")
 cap = cv2.VideoCapture(path_video)
 frame_width = int(cap.get(3))
 frame_height = int(cap.get(4))

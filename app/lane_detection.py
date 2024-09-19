@@ -6,13 +6,13 @@ from queue import Queue
 import os
 
 # defualt video number, if you want to process the "fog_video.mp4", change video_index to 1
-video_index = 1
+#video_index = 1
 
 # the result of lane detection, we add the road to the main frame
-road = np.zeros((720, 1280, 3))
+# road = np.zeros((720, 1280, 3))
 
 # A flag which means the process is started
-started = 0
+#started = 0
 
 # Pipeline combining color and gradient thresholding
 def thresholding_pipeline(img, s_thresh=(90, 255), sxy_thresh=(20, 100)):
@@ -122,8 +122,8 @@ def sliding_windows(binary_warped, nwindows=9):
 # Warp lane line projection back to original image
 def project_lanelines(binary_warped, orig_img, left_fit, right_fit, dst_mask, src_mask):
 
-    global road
-    global started
+    #global road
+    # global started
     ploty = np.linspace(0, binary_warped.shape[0]-1, binary_warped.shape[0])
     left_fitx = left_fit[0]*ploty**2 + left_fit[1]*ploty + left_fit[2]
     right_fitx = right_fit[0]*ploty**2 + right_fit[1]*ploty + right_fit[2]
@@ -143,26 +143,27 @@ def project_lanelines(binary_warped, orig_img, left_fit, right_fit, dst_mask, sr
     warped_inv = perspective_transform(color_warp, dst_mask, src_mask)
     road = warped_inv
     started = 1
+    return road, started
 
 # Main process functions
 def main_pipeline(input):
 
     # step 1 select the ROI, and we need to distort the image for fog_video
-    if video_index == 0:
-        image = input
-        top_left = [540, 460]
-        top_right = [754, 460]
-        bottom_right = [1190, 670]
-        bottom_left = [160, 670]
-    else:
-        mtx = np.array([[1.15396467e+03, 0.00000000e+00, 6.69708251e+02],[0.00000000e+00, 1.14802823e+03, 3.85661017e+02], 
-                       [0.00000000e+00, 0.00000000e+00, 1.00000000e+00]])
-        dist = np.array([[-2.41026561e-01, -5.30262184e-02, -1.15775369e-03, -1.27924043e-04, 2.66417032e-02]])
-        image = cv2.undistort(input, mtx, dist, None, mtx)
-        top_left = [240, 270]
-        top_right = [385, 270]
-        bottom_right = [685, 402]
-        bottom_left = [0, 402]
+    # if video_index == 0:
+    #     image = input
+    #     top_left = [540, 460]
+    #     top_right = [754, 460]
+    #     bottom_right = [1190, 670]
+    #     bottom_left = [160, 670]
+    # else:
+    mtx = np.array([[1.15396467e+03, 0.00000000e+00, 6.69708251e+02],[0.00000000e+00, 1.14802823e+03, 3.85661017e+02], 
+                   [0.00000000e+00, 0.00000000e+00, 1.00000000e+00]])
+    dist = np.array([[-2.41026561e-01, -5.30262184e-02, -1.15775369e-03, -1.27924043e-04, 2.66417032e-02]])
+    image = cv2.undistort(input, mtx, dist, None, mtx)
+    top_left = [240, 270]
+    top_right = [385, 270]
+    bottom_right = [685, 402]
+    bottom_left = [0, 402]
     src_mask = np.array([[(top_left[0], top_left[1]), (top_right[0], top_right[1]),
                           (bottom_right[0], bottom_right[1]), (bottom_left[0], bottom_left[1])]], np.int32)
     dst_mask = np.array([[(bottom_left[0], 0), (bottom_right[0], 0),
@@ -178,49 +179,77 @@ def main_pipeline(input):
     left_fit, right_fit, lefty, leftx, righty, rightx = sliding_windows(binary_warped, nwindows=9)
 
     # Step 5 Project Lines
-    project_lanelines(binary_warped, image, left_fit, right_fit, dst_mask, src_mask)
+    road, started = project_lanelines(binary_warped, image, left_fit, right_fit, dst_mask, src_mask)
+    
+    return road, started
 
 if __name__ == '__main__':
     outputdir=os.getcwd()
-    path0 = os.path.join(outputdir, "data", "project_video" + ".mp4")
-    #path1 = os.path.join(outputdir, "data", "fog_video" + ".mp4")
-    path1 = os.path.join(outputdir, "data", "freeway_0188" + ".mp4")
-    #path1 = os.path.join(outputdir, "data", "road_0116" + ".mp4")
+    #path0 = os.path.join(outputdir, "data", "project_video" + ".mp4")
+    path = os.path.join(outputdir, "data", "road_0160" + ".mp4")
     frames_counts = 1
-    if video_index == 0:
-        cap=cv2.VideoCapture(path0) 
-    else:
-        cap=cv2.VideoCapture(path1)      
+    cap=cv2.VideoCapture(path) 
+        
 
     class MyThread(Thread):
         def __init__(self, q):
             Thread.__init__(self)
             self.q = q
+            self.road = np.zeros((720, 1280, 3))  # Initialize 'road' as None to hold the result later
+            self.started = 0
 
         def run(self):
             while(1):
                 if (not self.q.empty()):
                     image = self.q.get()
-                    main_pipeline(image)
+                    self.road, self.started = main_pipeline(image)
+                    break  # Stop the loop after processing one item (if needed)
+        
+        def get_road(self):
+            return self.road, self.started
 
     q = Queue()
     q.queue.clear()
     thd1 = MyThread(q)
     # thd1.setDaemon(True)
     thd1.daemon = True
+    # Access the 'road' variable from the thread
 
     thd1.start()
 
     while (True):  
             start=time.time()
             ret,frame=cap.read()
+            if not ret:
+                print("Error: Failed to capture frame.")
+            if frame is None:
+                print("Error: Frame is None. Check if the video capture is working.")
             # Detect the lane every 5 frames
             if frames_counts % 5 == 0:
                 q.put(frame)
-
             # Add the lane image on the original frame if started
+            road,started = thd1.get_road()
+            
+            if road is None:
+                print("Error: Road is None. Check the image processing pipeline.")
+            
+
             if started:
-                frame = cv2.addWeighted(frame, 1, road, 0.5, 0.0)
+                # Ensure 'road' is the same size as 'frame'
+                if frame.shape[:2] != road.shape[:2]:
+                    road = cv2.resize(road, (frame.shape[1], frame.shape[0]))
+
+                # Ensure 'road' has the same number of channels as 'frame'
+                if len(road.shape) == 2:  # If 'road' is grayscale
+                    road = cv2.cvtColor(road, cv2.COLOR_GRAY2BGR)  # Convert to 3-channel BGR
+
+                # Ensure both 'frame' and 'road' have the same data type
+                if road.dtype != frame.dtype:
+                    road = road.astype(frame.dtype)
+
+                # Blend the images using cv2.addWeighted
+                frame = cv2.addWeighted(frame, 1.0, road, 0.5, 0.0)
+                #frame = cv2.addWeighted(frame, 1, road, 0.5, 0.0)
                 cv2.imshow("Real-time lane detection",frame)  
             if cv2.waitKey(1)&0xFF==ord('q'):  
                 break  
