@@ -18,6 +18,7 @@ def main():
 
         track_bar = st.sidebar.progress(0.0,text="Progressbar for tracking")
 
+
     if uploaded_video is not None:
         my_video = VideoHandler(uploaded_video)
 
@@ -37,7 +38,7 @@ def main():
 
         tracking_results, video_output = my_video.track(progressbar_callback=update_progressbar)
         
-        st.write(tracking_results)
+        #st.write(tracking_results)
         st.video(data=video_output)
 
         group_data = tracking_results[["frame_no","class_name"]].groupby(["frame_no","class_name"]).size().reset_index(name="count")
