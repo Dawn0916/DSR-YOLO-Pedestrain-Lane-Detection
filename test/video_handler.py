@@ -31,7 +31,9 @@ class VideoProcessor(VideoProcessorBase):
 
         # YOLO tracking
         results = self.model.track(source=img, conf=0.2, iou=0.6, stream=True, device=self.device)
-
+        print(results)
+        #
+        
         # Convert tracking results to a DataFrame for further processing/plotting
         df = convert_tracking_results_to_pandas(results)
         self.results_df = pd.concat([self.results_df, df])
@@ -68,6 +70,15 @@ def image_to_video_frame(img):
     # Convert the NumPy array (image) into an OpenCV-compatible format
     # In this case, the format is BGR for OpenCV, but it can be modified
     img_bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    # Get image dimensions
+    height, width, _ = img_bgr.shape
+
+    # Calculate the center point
+    center_x = width // 2
+    center_y = height // 2
+
+    # Draw a red dot (circle) at the center of the image
+    cv2.circle(img_bgr, (center_x, center_y), radius=5, color=(0, 0, 255), thickness=-1)
     
     # Convert the BGR image to a VideoFrame using PyAV
     return av.VideoFrame.from_ndarray(img_bgr, format="bgr24")
