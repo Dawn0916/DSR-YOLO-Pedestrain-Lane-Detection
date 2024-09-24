@@ -1,6 +1,6 @@
 import streamlit as st
 import plotly.express as px
-from video_handler import VideoProcessor
+from video_handler import VideoProcessor, streaming_call_back
 #from streamlit_webrtc import webrtc_streamer, RTCConfiguration
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode, RTCConfiguration
 
@@ -21,9 +21,10 @@ def main():
         # WebRTC Configuration (necessary for video streaming)
         rtc_configuration= RTCConfiguration({
             "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-        })
-        #video_frame_callback=streaming_call_back
-    )
+        }),
+        video_frame_callback=streaming_call_back  # call back needs access to the tracking results
+    )  ### drawing should be put in the callbak function
+
 
     # if webrtc_ctx.video_transformer:
     #     # Get tracking results DataFrame from the VideoHandler class
@@ -32,7 +33,7 @@ def main():
 
     #     if not tracking_results.empty:
             
-    #         # Display tracking results
+    #        # Display tracking results
     #         st.write(tracking_results)
             
     #         # Plot the class counts over time using Plotly
@@ -41,7 +42,7 @@ def main():
     #         final_df = group_data.pivot(index="frame_no", columns="class_name", values="count").fillna(0)
 
     #         fig = px.line(final_df,
-    #                       x=final_df.index,
+    #                        x=final_df.index,
     #                       y=tracking_results.class_name.unique(),
     #                       title='Class counts for each frame')
 

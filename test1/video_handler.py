@@ -42,9 +42,9 @@ class VideoProcessor(VideoProcessorBase):
         frame_new=image_to_video_frame(img)
         return frame_new  # Return the original frame (or process if necessary)
     
-    # def get_tracking_results(self):
-    #     """ Get the accumulated YOLO tracking results as a DataFrame. """
-    #     return self.results_df
+    def get_tracking_results(self):
+        """ Get the accumulated YOLO tracking results as a DataFrame. """
+        return self.results_df
     
 
 # Step 1: Convert DataFrame to a heatmap image using Matplotlib
@@ -83,10 +83,20 @@ def image_to_video_frame(img):
     # Convert the BGR image to a VideoFrame using PyAV
     return av.VideoFrame.from_ndarray(img_bgr, format="bgr24")
 
-# def streaming_call_back():
-#     df_result = VideoProcessor.get_tracking_results()
-#     # Convert the DataFrame to an image
-#     img = df_to_image(df_result)
-#     # Convert the image to a video frame
-#     result_video_frame = image_to_video_frame(img)
-#     return result_video_frame
+def streaming_call_back():
+    df_result = VideoProcessor.get_tracking_results()
+    # Convert the DataFrame to an image
+    img = df_to_image(df_result)
+    # Get image dimensions
+    height, width, _ = img.shape
+
+    # Calculate the center point
+    center_x = width // 2
+    center_y = height // 2
+
+    # Draw a red dot (circle) at the center of the image
+    cv2.circle(img, (center_x, center_y), radius=5, color=(0, 0, 255), thickness=-1)
+
+    # Convert the image to a video frame
+    result_video_frame = image_to_video_frame(img)
+    return result_video_frame
