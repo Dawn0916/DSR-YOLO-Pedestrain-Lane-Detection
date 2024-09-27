@@ -3,14 +3,14 @@ import pandas as pd
 from yolo_helper import convert_tracking_results_to_pandas
 import ultralytics
 import cv2
-from lane_detection import LaneLines  # Import the lane detection class
+# from lane_detection import LaneLines  # Import the lane detection class
 
 class VideoHandler:
     def __init__(self):
         # Load the YOLOv8 model
         self.model = ultralytics.YOLO("yolov8n.pt")  # Replace with the path to your model if necessary
         self.device = 0 if torch.cuda.is_available() else 'cpu'
-        self.lane_detector = LaneLines()  # Initialize the lane detector
+        # self.lane_detector = LaneLines()  # Initialize the lane detector
         self.results_df = pd.DataFrame()
 
     def process_frame(self, frame):
@@ -30,8 +30,8 @@ class VideoHandler:
                 cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
                 cv2.putText(frame, label, (int(x1), int(y1)-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
 
-        # Perform lane detection on the frame
-        frame = self.lane_detector.forward(frame)
+        # # Perform lane detection on the frame
+        # frame = self.lane_detector.forward(frame)
 
         # Return the processed frame with both YOLO object detection and lane detection
         return frame, tracking_results
