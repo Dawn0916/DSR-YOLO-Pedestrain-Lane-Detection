@@ -4,6 +4,8 @@ import time
 from threading import Thread
 from queue import Queue
 import os
+import subprocess
+import moviepy.editor as moviepy
 
 # defualt video number, if you want to process the "fog_video.mp4", change video_index to 1
 #video_index = 1
@@ -193,7 +195,22 @@ if __name__ == '__main__':
     path = os.path.join(outputdir, "data", "road_0160" + ".mp4")
     frames_counts = 1
     cap=cv2.VideoCapture(path) 
-        
+
+    # Step: Save the video in AVI format using XVID codec
+    # fourcc = cv2.VideoWriter_fourcc(*'XVID')  # Codec for AVI files
+    # fps = 20.0  # Frames per second
+    # frame_width = int(cap.get(3))  # Get frame width
+    # frame_height = int(cap.get(4))  # Get frame height
+    # output_video_path_avi = 'test/lane_detection_output_video.avi'
+    # out = cv2.VideoWriter(output_video_path_avi, fourcc, fps, (frame_width, frame_height))    
+
+    # Step: Save the video in MP4 format using mp4v codec
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Codec for AVI files
+    fps = 20.0  # Frames per second
+    frame_width = int(cap.get(3))  # Get frame width
+    frame_height = int(cap.get(4))  # Get frame height
+    output_video_path_avi = 'test/lane_detection_output_video.mp4'
+    out = cv2.VideoWriter(output_video_path_avi, fourcc, fps, (frame_width, frame_height))    
 
     class MyThread(Thread):
         def __init__(self, q):
@@ -226,8 +243,10 @@ if __name__ == '__main__':
             ret,frame=cap.read()
             if not ret:
                 print("Error: Failed to capture frame.")
+                break
             if frame is None:
                 print("Error: Frame is None. Check if the video capture is working.")
+                break
             # Detect the lane every 5 frames
             if frames_counts % 5 == 0:
                 q.put(frame)
@@ -236,7 +255,7 @@ if __name__ == '__main__':
             
             if road is None:
                 print("Error: Road is None. Check the image processing pipeline.")
-            
+                break
 
             if started:
                 # Ensure 'road' is the same size as 'frame'
@@ -254,7 +273,12 @@ if __name__ == '__main__':
                 # Blend the images using cv2.addWeighted
                 frame = cv2.addWeighted(frame, 1.0, road, 0.5, 0.0)
                 #frame = cv2.addWeighted(frame, 1, road, 0.5, 0.0)
-                cv2.imshow("Real-time lane detection",frame)  
+                
+            # Write the processed frame to the AVI video file
+            out.write(frame)
+            cv2.imshow("Real-time lane detection", frame)
+
+                
             if cv2.waitKey(1)&0xFF==ord('q'):  
                 break  
             
@@ -265,4 +289,3 @@ if __name__ == '__main__':
 
     cap.release()  
     cv2.destroyAllWindows() 
-
