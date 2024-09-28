@@ -37,18 +37,15 @@ def region_of_interest(img, vertices):
 def draw_the_lines(img, lines):
 
     if lines is not None:
-       
     	img = np.copy(img)
-    	line_image = np.zeros((img.shape[0], img.shape[1], 3), dtype=np.uint8)
-    	for line in lines:
+        line_image = np.zeros((img.shape[0], img.shape[1], 3), dtype=np.uint8)
+        for line in lines:
         	for x1,y1,x2,y2 in line:      
         		cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 20)
-    
-    	α = 1
-    	β = 1
-    	γ = 0    
-
-    	img = cv2.addWeighted(img, α, line_image, β, γ)
+        α = 1
+        β = 1
+        γ = 0    
+        img = cv2.addWeighted(img, α, line_image, β, γ)
     return img
 	
 
@@ -67,13 +64,13 @@ result= cv2.VideoWriter('./track/lines.avi',
 while cap.isOpened():
     ret, frame = cap.read()
     if(frame is not None):
-      frame = process(frame)
-      result.write(frame)
+        frame = process(frame)
+        result.write(frame)
     
-      if cv2.waitKey(1) & 0xFF == ord('q'):
-          break
-    else:
-      break
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+        else:
+            break
 
 cap.release()
 cv2.destroyAllWindows()

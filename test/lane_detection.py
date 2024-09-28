@@ -186,7 +186,7 @@ def main_pipeline(input):
 if __name__ == '__main__':
     outputdir=os.getcwd()
     #path0 = os.path.join(outputdir, "data", "project_video" + ".mp4")
-    path = os.path.join(outputdir, "data", "road_0160" + ".mp4")
+    path = os.path.join(outputdir, "data", "project_video" + ".mp4")
     frames_counts = 1
     cap=cv2.VideoCapture(path) 
         
