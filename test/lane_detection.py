@@ -160,10 +160,14 @@ def main_pipeline(input):
                    [0.00000000e+00, 0.00000000e+00, 1.00000000e+00]])
     dist = np.array([[-2.41026561e-01, -5.30262184e-02, -1.15775369e-03, -1.27924043e-04, 2.66417032e-02]])
     image = cv2.undistort(input, mtx, dist, None, mtx)
-    top_left = [240, 270]
-    top_right = [385, 270]
-    bottom_right = [685, 402]
-    bottom_left = [0, 402]
+    # top_left = [240, 270]
+    # top_right = [385, 270]
+    # bottom_right = [685, 402]
+    # bottom_left = [0, 402]
+    top_left = [540, 460]
+    top_right = [754, 460]
+    bottom_right = [1190, 670]
+    bottom_left = [160, 670]
     src_mask = np.array([[(top_left[0], top_left[1]), (top_right[0], top_right[1]),
                           (bottom_right[0], bottom_right[1]), (bottom_left[0], bottom_left[1])]], np.int32)
     dst_mask = np.array([[(bottom_left[0], 0), (bottom_right[0], 0),
@@ -186,7 +190,7 @@ def main_pipeline(input):
 if __name__ == '__main__':
     outputdir=os.getcwd()
     #path0 = os.path.join(outputdir, "data", "project_video" + ".mp4")
-    path = os.path.join(outputdir, "data", "project_video" + ".mp4")
+    path = os.path.join(outputdir, "data", "road_0160" + ".mp4")
     frames_counts = 1
     cap=cv2.VideoCapture(path) 
         
