@@ -216,8 +216,9 @@ def main_pipeline(input):
 
 if __name__ == '__main__':
     outputdir=os.getcwd()
-    #path0 = os.path.join(outputdir, "data", "project_video" + ".mp4")
-    path = os.path.join(outputdir, "data", "road_0160" + ".mp4")
+    # path = os.path.join(outputdir, "data", "road_0160" + ".mp4")
+    # path = os.path.join(outputdir, "data", "road_0095" + ".mp4")
+    path = os.path.join(outputdir, "data", "road_0116" + ".mp4")
     frames_counts = 1
     cap=cv2.VideoCapture(path) 
 
@@ -234,7 +235,9 @@ if __name__ == '__main__':
     fps = 20.0  # Frames per second
     frame_width = int(cap.get(3))  # Get frame width
     frame_height = int(cap.get(4))  # Get frame height
-    output_video_path_avi = 'test/road_0160_lane_detection_output_video.mp4'
+    # output_video_path_avi = 'test/road_0160_lane_detection_output_video.mp4'
+    output_video_path_avi = 'test/road_0116_lane_detection_output_video.mp4'
+
     out = cv2.VideoWriter(output_video_path_avi, fourcc, fps, (frame_width, frame_height))    
 
     class MyThread(Thread):
@@ -255,8 +258,13 @@ if __name__ == '__main__':
                     self.road, self.started, self.leftx, self.lefty, self.rightx, self.righty = main_pipeline(image)
                     lane_left_coordinates = np.column_stack((self.leftx, self.lefty))
                     lane_right_coordinates = np.column_stack((self.rightx, self.righty))
-                    np.savetxt("test/road_0160_lane_left_coordinates.csv", lane_left_coordinates, delimiter=",", fmt="%.2f")
-                    np.savetxt("test/road_0160_lane_right_coordinates.csv", lane_right_coordinates, delimiter=",", fmt="%.2f")
+
+                    # np.savetxt("test/road_0160_lane_left_coordinates.csv", lane_left_coordinates, delimiter=",", fmt="%.2f")
+                    # np.savetxt("test/road_0160_lane_right_coordinates.csv", lane_right_coordinates, delimiter=",", fmt="%.2f")
+                    # np.savetxt("test/road_0095_lane_left_coordinates.csv", lane_left_coordinates, delimiter=",", fmt="%.2f")
+                    # np.savetxt("test/road_0095_lane_right_coordinates.csv", lane_right_coordinates, delimiter=",", fmt="%.2f")
+                    np.savetxt("test/road_0116_lane_left_coordinates.csv", lane_left_coordinates, delimiter=",", fmt="%.2f")
+                    np.savetxt("test/road_0116_lane_right_coordinates.csv", lane_right_coordinates, delimiter=",", fmt="%.2f")
                     break  # Stop the loop after processing one item (if needed)
         
         def get_road(self):

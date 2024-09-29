@@ -37,12 +37,12 @@ def main():
             track_bar.progress(frame_counter/total_frames)
 
         # tracking_results, video_output = my_video.track(progressbar_callback=update_progressbar)
-        _, video_output = my_video.track(progressbar_callback=update_progressbar)
+        tracking_results, video_output = my_video.track(progressbar_callback=update_progressbar)
         
         
         st.video(data=video_output)  # display a video in a Streamlit app
 
-        #st.write(tracking_results) # providing a user-friendly tabular view of the object tracking results
+        st.write(tracking_results) # providing a user-friendly tabular view of the object tracking results
 
         # ############################################### 
         # ################## Plot the tracking results (not in the video)
