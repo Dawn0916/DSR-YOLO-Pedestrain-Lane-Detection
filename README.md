@@ -11,6 +11,28 @@ Enhancing Safety in Autonomous Driving
  • Specifically: Implement a real-time object 
 detection system for self-driving cars
 
+
+### How to run the code?
+1. App1:  Object Detection for an Uploaded Video: 
+streamlit run .\app1_pedestrain_uploaded_video\myapp.py
+
+2. App2: Object Detection for Video Streaming: 
+streamlit run .\app2_pedestrain_streaming\myapp.py
+
+3. App3: Object & Lane Detection for Video Streaming: 
+streamlit run .\app3_pedestrain_lane_streaming\myapp.py
+
+4. Lane Detection result: 
+python .\lane_detection\lane_detection.py
+
+5. Combination of Object and Lane Detection: 
+python .\combine_lane_object\combine.py
+
+6. In addition to Combination of Object and Lane Detection, give alram when the pedestrain is in danger: 
+python .\combine_lane_object\combined_with_alarm.py
+
+
+
 ### Deployed apps in Streamlit:
 ## Anyone with the following links can play with the apps in your devices, e.g., PC, laptop, smartphone
 App1:  Object Detection for an Uploaded Video
@@ -22,24 +44,4 @@ App2: Object Detection for Video Streaming
 
 App3: Object & Lane Detection for Video Streaming
 
-
-
-### How to run the code?
-1. App1:  Object Detection for an Uploaded Video
-streamlit run .\app1_pedestrain_uploaded_video\myapp.py
-
-2. App2: Object Detection for Video Streaming
-streamlit run .\app2_pedestrain_streaming\myapp.py
-
-3. App3: Object & Lane Detection for Video Streaming
-streamlit run .\app3_pedestrain_lane_streaming\myapp.py
-
-4. Lane Detection result:
-python .\lane_detection\lane_detection.py
-
-5. Combination of Object and Lane Detection: 
-python .\combine_lane_object\combine.py
-
-6. In addition to Combination of Object and Lane Detection, give alram when the pedestrain is in danger:
-python .\combine_lane_object\combined_with_alarm.py
 

@@ -4,6 +4,7 @@ import ultralytics
 #from video_helper import get_video_properties
 import pandas as pd
 import numpy as np
+import cv2
 
 
 def _convert_single_tracking_result(frame_no, boxes_result:ultralytics.engine.results.Boxes):

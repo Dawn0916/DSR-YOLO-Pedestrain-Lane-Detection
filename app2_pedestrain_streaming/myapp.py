@@ -4,6 +4,7 @@ from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode, RT
 from video_handler import VideoHandler
 import av
 import torch
+import cv2
 
 
 # WebRTC Configuration for video streaming
