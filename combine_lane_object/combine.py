@@ -2,14 +2,14 @@ import cv2
 import os
 
 # Paths for input object detection video and lane detection video
-# object_detection_video_path = "combine_lane_object/road_0160_object_detection.mp4"
-# lane_detection_video_path = "combine_lane_object/road_0160_lane_detection.mp4"
-object_detection_video_path = "combine_lane_object/road_0095_object_detection.mp4"
-lane_detection_video_path = "combine_lane_object/road_0095_lane_detection.mp4"
+object_detection_video_path = "combine_lane_object/road_0160_object_detection.mp4"
+lane_detection_video_path = "combine_lane_object/road_0160_lane_detection.mp4"
+# object_detection_video_path = "combine_lane_object/road_0095_object_detection.mp4"
+# lane_detection_video_path = "combine_lane_object/road_0095_lane_detection.mp4"
 
 # Path to save the final combined output video
-# combined_output_video_path = "combine_lane_object/road_0160_combined.mp4"
-combined_output_video_path = "combine_lane_object/road_0095_combined.mp4"
+combined_output_video_path = "combine_lane_object/road_0160_combined.mp4"
+# combined_output_video_path = "combine_lane_object/road_0095_combined.mp4"
 
 # Open both videos
 object_cap = cv2.VideoCapture(object_detection_video_path)
