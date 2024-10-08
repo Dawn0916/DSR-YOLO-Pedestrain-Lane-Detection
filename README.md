@@ -13,9 +13,9 @@ detection system for self-driving cars
 
 
 # How to run the code?
-## Step 1: Create a virtural environment: python -m venv venv
-## Step 2: Activate the virtural environment: .\venv\Scripts\activate
-## Step 3: Run the following code according to your interests:
+### Step 1: Create a virtural environment: python -m venv venv
+### Step 2: Activate the virtural environment: .\venv\Scripts\activate
+### Step 3: Run the following code according to your interests:
 1. App1:  Object Detection for an Uploaded Video: 
 streamlit run .\app1_pedestrain_uploaded_video\myapp.py
 
