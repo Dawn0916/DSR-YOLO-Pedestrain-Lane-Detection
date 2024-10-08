@@ -3,13 +3,16 @@ Enhancing Safety in Autonomous Driving
 
 # Motivation and Goal of the Project
 ## Motivation:
- ### Safety is a big concern when it comes to embracing self-driving cars or not!
- ### Real-time object detection is critical in ensuring safety in autonomous driving
- ### Quick, accurate decisions can sometimes save lives in a dangerous situation
+  1. Safety is a big concern when it comes to embracing self-driving cars or not!
+  
+  2. Real-time object detection is critical in ensuring safety in autonomous driving
+  
+  3. Quick, accurate decisions can sometimes save lives in a dangerous situation
+  
 ## Goal:
- ### General: Enhance safety in autonomous driving
- ### Specifically: Implement a real-time object 
-detection system for self-driving cars
+  1. General: Enhance safety in autonomous driving
+  
+  2. Specifically: Implement a real-time object detection system for self-driving cars
 
 
 # How to run the code?
